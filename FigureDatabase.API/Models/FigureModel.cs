@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace FigureDatabase.API.Models;
+
 public class FigureModel
 {
    public FigureModel(int id, string name)

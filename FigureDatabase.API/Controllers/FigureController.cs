@@ -1,3 +1,4 @@
+using FigureDatabase.API.Models;
 using FigureDatabase.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

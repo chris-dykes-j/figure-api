@@ -9,7 +9,7 @@ builder.Services.AddControllers(options => options.ReturnHttpNotAcceptable = tru
 builder.Services.AddDbContext<FigureDbContext>(options =>
     options.UseNpgsql(Environment.GetEnvironmentVariable("FIGURE_DB")));
 
-builder.Services.AddScoped<FigureRepository>();
+builder.Services.AddScoped<IFigureRepository, MockFigureRepository>();
 
 var app = builder.Build();
 

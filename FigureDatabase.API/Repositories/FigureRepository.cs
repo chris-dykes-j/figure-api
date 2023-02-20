@@ -22,18 +22,31 @@ public class FigureRepository : IFigureRepository
 
     public async Task<IEnumerable<FigureModel>> GetListOfFigures()
     {
-        throw new NotImplementedException();
+        return await _context.Figures.ToListAsync();
     }
     
-    public async Task<IEnumerable<FigureModel>> GetListOfFigures(string characterName, string brandName)
+    public async Task<IEnumerable<FigureModel>> GetListOfFigures(string character, string brand)
     {
-        if (string.IsNullOrWhiteSpace(characterName) && string.IsNullOrWhiteSpace(brandName))
+        if (string.IsNullOrWhiteSpace(character) && string.IsNullOrWhiteSpace(brand))
+        {
             return await GetListOfFigures();
+        }
 
-        characterName = characterName.Trim();
+        var collection = _context.Figures as IQueryable<FigureModel>;
+
+        if (!string.IsNullOrWhiteSpace(character))
+        {
+            character = character.ToLower().Replace(" ", "");
+            collection = collection.Where(x=> x.Character.ToLower().Replace(" ", "").Contains(character)
+                || x.Name.ToLower().Replace(" ", "").Contains(character));
+        }
+
+        if (!string.IsNullOrWhiteSpace(brand))
+        {
+            brand = brand.ToLower().Replace(" ", "");
+            collection = collection.Where(x => x.Brand.ToLower().Replace(" ", "").Contains(brand));
+        }
         
-        return await _context.Figures
-            .Where(x => x.CharacterName == characterName)
-            .ToListAsync();
+        return await collection.ToListAsync();
     }
 }

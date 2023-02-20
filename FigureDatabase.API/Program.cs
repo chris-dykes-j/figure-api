@@ -7,9 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(options => options.ReturnHttpNotAcceptable = true);
 
 builder.Services.AddDbContext<FigureDbContext>(options =>
-    options.UseNpgsql(Environment.GetEnvironmentVariable("FIGURE_DB")));
+    options.UseNpgsql("Host=localhost;Port=5432;Username=chris;Password=;Database=figures"));
 
-builder.Services.AddScoped<IFigureRepository, MockFigureRepository>();
+builder.Services.AddScoped<IFigureRepository, FigureRepository>();
 
 var app = builder.Build();
 

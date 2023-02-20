@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FigureDatabase.API.Controllers;
 
-[Route("/figures")]
 [ApiController]
+[Route("/figures")]
 public class FigureController : ControllerBase
 {
     private readonly IFigureRepository _repository;
@@ -15,13 +15,12 @@ public class FigureController : ControllerBase
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-
     [HttpGet]
     public async Task<ActionResult<List<FigureModel>>> GetListOfFigures(
-        string? characterName = "",
-        string? brandName = "")
+        [FromQuery] string? character = "",
+        [FromQuery] string? brand = "") 
     {
-        return Ok (await _repository.GetListOfFigures(characterName, brandName));
+        return Ok (await _repository.GetListOfFigures(character, brand));
     }
     
     [HttpGet]
@@ -31,6 +30,13 @@ public class FigureController : ControllerBase
         var figure = await _repository.GetFigureById(id);
         return figure == null ? NotFound() : Ok(figure);
     }
-
-
+    /*
+    int? releaseYear,
+    string? releaseMonth,
+    int? releasePrice,
+    long? janCode,
+    string? series,
+    string? productLine,
+    string? sculptor)
+    */
 }

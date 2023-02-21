@@ -1,5 +1,6 @@
 using FigureDatabase.API.Models;
 using FigureDatabase.API.Repositories;
+using FigureDatabase.API.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FigureDatabase.API.Controllers;
@@ -16,11 +17,9 @@ public class FigureController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<FigureModel>>> GetListOfFigures(
-        [FromQuery] string? character = "",
-        [FromQuery] string? brand = "") 
+    public async Task<ActionResult<List<FigureModel>>> GetListOfFigures([FromQuery] FiguresParameters figuresParameters) 
     {
-        return Ok (await _repository.GetListOfFigures(character, brand));
+        return Ok (await _repository.GetListOfFigures(figuresParameters));
     }
     
     [HttpGet]
@@ -30,13 +29,5 @@ public class FigureController : ControllerBase
         var figure = await _repository.GetFigureById(id);
         return figure == null ? NotFound() : Ok(figure);
     }
-    /*
-    int? releaseYear,
-    string? releaseMonth,
-    int? releasePrice,
-    long? janCode,
-    string? series,
-    string? productLine,
-    string? sculptor)
-    */
+
 }

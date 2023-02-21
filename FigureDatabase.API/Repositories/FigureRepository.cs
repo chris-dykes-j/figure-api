@@ -1,5 +1,6 @@
 using FigureDatabase.API.Context;
 using FigureDatabase.API.Models;
+using FigureDatabase.API.ResourceParameters;
 using Microsoft.EntityFrameworkCore;
 
 namespace FigureDatabase.API.Repositories;
@@ -25,25 +26,25 @@ public class FigureRepository : IFigureRepository
         return await _context.Figures.ToListAsync();
     }
     
-    public async Task<IEnumerable<FigureModel>> GetListOfFigures(string character, string brand)
+    public async Task<IEnumerable<FigureModel>> GetListOfFigures(FiguresParameters figuresParameters)
     {
-        if (string.IsNullOrWhiteSpace(character) && string.IsNullOrWhiteSpace(brand))
+        if (figuresParameters == null)
         {
             return await GetListOfFigures();
         }
 
         var collection = _context.Figures as IQueryable<FigureModel>;
 
-        if (!string.IsNullOrWhiteSpace(character))
+        if (!string.IsNullOrWhiteSpace(figuresParameters.Character))
         {
-            character = character.ToLower().Replace(" ", "");
+            var character = figuresParameters.Character.ToLower().Replace(" ", "");
             collection = collection.Where(x=> x.Character.ToLower().Replace(" ", "").Contains(character)
                 || x.Name.ToLower().Replace(" ", "").Contains(character));
         }
 
-        if (!string.IsNullOrWhiteSpace(brand))
+        if (!string.IsNullOrWhiteSpace(figuresParameters.Brand))
         {
-            brand = brand.ToLower().Replace(" ", "");
+            var brand = figuresParameters.Brand.ToLower().Replace(" ", "");
             collection = collection.Where(x => x.Brand.ToLower().Replace(" ", "").Contains(brand));
         }
         

@@ -5,6 +5,8 @@ namespace FigureDatabase.API.Models;
 public class FigureModel
 {
    [Key]
+   public int Id { get; set; }
+   
    public string? Name { get; set; }
 
    public string? Series { get; set; }

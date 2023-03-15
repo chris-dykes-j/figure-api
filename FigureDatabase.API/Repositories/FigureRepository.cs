@@ -26,7 +26,7 @@ public class FigureRepository : IFigureRepository
         return await _context.Figures.ToListAsync();
     }
     
-    public async Task<IEnumerable<FigureModel>> GetListOfFigures(FiguresParameters figuresParameters)
+    public async Task<IEnumerable<FigureModel>> GetListOfFigures(FiguresParameters? figuresParameters)
     {
         if (figuresParameters == null)
         {

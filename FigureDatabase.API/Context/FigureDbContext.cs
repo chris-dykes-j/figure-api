@@ -20,6 +20,7 @@ public class FigureDbContext : DbContext
             entity.Property(e => e.BlogUrl).HasColumnName("blog_url");
             entity.Property(e => e.Brand).HasColumnName("brand");
             entity.Property(e => e.Character).HasColumnName("character");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Material).HasColumnName("material");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.Painter).HasColumnName("painter");

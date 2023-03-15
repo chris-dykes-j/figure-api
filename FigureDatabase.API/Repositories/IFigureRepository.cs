@@ -7,5 +7,5 @@ public interface IFigureRepository
 {
     Task<FigureModel?> GetFigureByName(string name);
     Task<IEnumerable<FigureModel>> GetListOfFigures();
-    Task<IEnumerable<FigureModel>> GetListOfFigures(FiguresParameters figuresParameters);
+    Task<IEnumerable<FigureModel>> GetListOfFigures(FiguresParameters? figuresParameters);
 }

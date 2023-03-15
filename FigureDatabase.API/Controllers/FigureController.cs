@@ -17,7 +17,7 @@ public class FigureController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<FigureModel>>> GetListOfFigures([FromQuery] FiguresParameters figuresParameters) 
+    public async Task<ActionResult<List<FigureModel>>> GetListOfFigures([FromQuery] FiguresParameters? figuresParameters) 
     {
         return Ok (await _repository.GetListOfFigures(figuresParameters));
     }

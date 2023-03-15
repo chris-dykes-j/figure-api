@@ -5,7 +5,7 @@ namespace FigureDatabase.API.Repositories;
 
 public interface IFigureRepository
 {
-    Task<FigureModel?> GetFigureById(int id);
+    Task<FigureModel?> GetFigureByName(string name);
     Task<IEnumerable<FigureModel>> GetListOfFigures();
     Task<IEnumerable<FigureModel>> GetListOfFigures(FiguresParameters figuresParameters);
 }

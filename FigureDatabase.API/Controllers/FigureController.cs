@@ -23,10 +23,10 @@ public class FigureController : ControllerBase
     }
     
     [HttpGet]
-    [Route("/{id:int}")]
-    public async Task<ActionResult<FigureModel>> GetFigureById(int id)
+    [Route("/{name}")]
+    public async Task<ActionResult<FigureModel>> GetFigureByName(string name)
     {
-        var figure = await _repository.GetFigureById(id);
+        var figure = await _repository.GetFigureByName(name);
         return figure == null ? NotFound() : Ok(figure);
     }
 

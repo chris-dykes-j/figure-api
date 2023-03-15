@@ -14,10 +14,10 @@ public class FigureRepository : IFigureRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
     
-    public async Task<FigureModel?> GetFigureById(int id)
+    public async Task<FigureModel?> GetFigureByName(string name)
     {
         return await _context.Figures
-            .Where(x => x.Id == id)
+            .Where(x => x.Name!.ToLower() == name.ToLower())
             .FirstOrDefaultAsync();
     }
 

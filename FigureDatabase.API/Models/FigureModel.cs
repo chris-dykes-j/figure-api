@@ -5,25 +5,27 @@ namespace FigureDatabase.API.Models;
 public class FigureModel
 {
    [Key]
-   public int Id { get; set; }
+   public string? Name { get; set; }
 
-   public string Name { get; set; } = null!;
-
-   public string Character { get; set; } = null!;
-
-   public string Brand { get; set; } = null!;
-   
-   public int? Year { get; set; }
-   
-   public string? Month { get; set; }
-   
-   public int? ReleasePrice { get; set; } 
-   
-   public long? JanCode { get; set; }
-   
    public string? Series { get; set; }
-   
-   public string? ProductLine { get; set; }
-   
+
+   public string? Character { get; set; }
+
+   public string? Release { get; set; }
+
+   public string? Price { get; set; }
+
+   public string? Size { get; set; }
+
    public string? Sculptor { get; set; }
+
+   public string? Painter { get; set; }
+
+   public string? Material { get; set; }
+
+   public string? Brand { get; set; }
+
+   public string? Url { get; set; }
+
+   public string? BlogUrl { get; set; }
 }

@@ -9,10 +9,10 @@ public class FigureDto
     public string FigureName { get; set; }
     public string SeriesName { get; set; }
     public string CharacterName { get; set; }
-    public List<string> Sculptor { get; set; }
-    public List<string> Painter { get; set; }
-    public List<string> Material { get; set; }
-    public List<string> Measurement { get; set; }
+    public List<string> Sculptors { get; set; }
+    public List<string> Painters { get; set; }
+    public List<string> Materials { get; set; }
+    public List<string> Measurements { get; set; }
     public List<int> ReleaseYears { get; set; }
     public List<int> ReleaseMonths { get; set; }
     public List<int?> PricesWithTax { get; set; }

@@ -1,3 +1,9 @@
-# Figure Repository Restful Web API
+# Figure Web API
 
-WIP
+Read only RESTful Web API, WIP. Currently only implemented to show Alter figures.
+
+### Goals
+[ ] Pagination
+[ ] Searching and Filtering
+[ ] HATEOS
+[ ] Images of database entries

@@ -1,6 +1,6 @@
 ﻿namespace Figure.WebAPI.Entities;
 
-public partial class ReleaseDate
+public class ReleaseDate
 {
     public int Id { get; set; }
 
@@ -10,5 +10,5 @@ public partial class ReleaseDate
 
     public short ReleaseMonth { get; set; }
 
-    public virtual global::Figure.WebAPI.Entities.AnimeFigure AnimeFigure { get; set; } = null!;
+    public virtual AnimeFigure AnimeFigure { get; set; } = null!;
 }

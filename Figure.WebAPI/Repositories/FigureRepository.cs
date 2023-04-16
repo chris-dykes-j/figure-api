@@ -49,14 +49,14 @@ public class FigureRepository
                 CharacterName = cn.Text,
                 Sculptors = sGroup.Where(x => x.LanguageCode == languageCode).Select(x => x.Text).ToList(),
                 Painters = pGroup.Where(x => x.LanguageCode == languageCode).Select(x => x.Text).ToList(),
-                Materials = new List<string>(),//mGroup.Select(x => x.Material).ToList(),
+                Materials = mGroup.Select(x => x.MaterialType).ToList(),
                 Measurements = meGroup.Where(x => x.LanguageCode == languageCode).Select(x => x.Text).ToList(),
                 ReleaseYears = rdGroup.Select(x => x.ReleaseYear).ToList(),
-                ReleaseMonths = new List<int>(),//rdGroup.Select(x => x.ReleaseMonth).ToList(),
+                ReleaseMonths = rdGroup.Select(x => x.ReleaseMonth).ToList(),
                 PricesWithTax = prGroup.Select(x => x.PriceWithTax).ToList(),
                 PricesWithoutTax = prGroup.Select(x => x.PriceWithoutTax).ToList(),
                 Edition = pr.Edition,
-                BlogUrls = new List<string>()//buGroup.Select(x => x.BlogUrl).ToList()
+                BlogUrls = buGroup.Select(x => x.Url).ToList()
             })
             .FirstOrDefaultAsync();
     }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Figure.WebAPI.Controllers;
 
 [ApiController]
-[Route("/scale-figure")]
+[Route("/figure")]
 public class FigureController : ControllerBase
 {
     private readonly FigureService _figureService;
@@ -17,8 +17,13 @@ public class FigureController : ControllerBase
     
     [HttpGet]
     [Route("/{id:int}")]
-    public async Task<ActionResult<FigureDto>> GetFigureById(int id) => 
-        (ActionResult<FigureDto>) Ok(await _figureService.GetFigureById(id)) ?? NotFound();
+    public async Task<ActionResult<FigureDto?>> GetFigureById(int id)
+    {
+        var figure = await _figureService.GetFigureById(id);
+        return Ok(figure); // : NotFound();
+    }
+
+        
 
     // Get list of figures. Paginate results. Include search and filter queries.
     

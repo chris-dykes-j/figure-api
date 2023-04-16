@@ -63,7 +63,7 @@ public partial class FiguresDbContext : DbContext
             entity.ToTable("blog_url");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.BlogUrl1)
+            entity.Property(e => e.Url)
                 .HasMaxLength(255)
                 .HasColumnName("blog_url");
             entity.Property(e => e.FigureId).HasColumnName("figure_id");
@@ -170,7 +170,7 @@ public partial class FiguresDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.FigureId).HasColumnName("figure_id");
-            entity.Property(e => e.Material1)
+            entity.Property(e => e.MaterialType)
                 .HasMaxLength(255)
                 .HasColumnName("material");
 

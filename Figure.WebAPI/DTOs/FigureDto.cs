@@ -14,7 +14,7 @@ public class FigureDto
     public List<string> Materials { get; set; }
     public List<string> Measurements { get; set; }
     public List<int> ReleaseYears { get; set; }
-    public List<int> ReleaseMonths { get; set; }
+    public List<short> ReleaseMonths { get; set; }
     public List<int?> PricesWithTax { get; set; }
     public List<int?> PricesWithoutTax { get; set; }
     public string Edition { get; set; }

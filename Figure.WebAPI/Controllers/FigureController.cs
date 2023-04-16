@@ -20,7 +20,7 @@ public class FigureController : ControllerBase
     public async Task<ActionResult<FigureDto?>> GetFigureById(int id)
     {
         var figure = await _figureService.GetFigureById(id);
-        return Ok(figure);
+        return figure.Result != null ? Ok(figure) : NotFound();
     }
 
     // Get list of figures. Paginate results. Include search and filter queries.
@@ -29,5 +29,4 @@ public class FigureController : ControllerBase
     {
         return Ok(await _figureService.GetListOfFigures());
     }
-
 }

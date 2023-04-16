@@ -20,10 +20,9 @@ public class FigureController : ControllerBase
     public async Task<ActionResult<FigureDto?>> GetFigureById(int id)
     {
         var figure = await _figureService.GetFigureById(id);
-        return figure.Result != null ? Ok(figure) : NotFound();
+        return figure != null ? Ok(figure) : NotFound();
     }
 
-    // Get list of figures. Paginate results. Include search and filter queries.
     [HttpGet]
     public async Task<ActionResult<List<FigureDto>>> GetListOfFigures()
     {

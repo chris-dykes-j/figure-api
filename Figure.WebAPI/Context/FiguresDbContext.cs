@@ -7,8 +7,6 @@ public partial class FiguresDbContext : DbContext
 {
     public FiguresDbContext(DbContextOptions<FiguresDbContext> options) : base(options) { }
 
-    public virtual DbSet<AlterFigure> AlterFigures { get; set; } = null!;
-
     public virtual DbSet<BlogUrl> BlogUrls { get; set; } = null!;
 
     public virtual DbSet<CharacterName> CharacterNames { get; set; } = null!;
@@ -35,27 +33,6 @@ public partial class FiguresDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AlterFigure>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("alter_figures_pkey");
-
-            entity.ToTable("alter_figures");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.BlogUrl).HasColumnName("blog_url");
-            entity.Property(e => e.Brand).HasColumnName("brand");
-            entity.Property(e => e.Character).HasColumnName("character");
-            entity.Property(e => e.Material).HasColumnName("material");
-            entity.Property(e => e.Name).HasColumnName("name");
-            entity.Property(e => e.Painter).HasColumnName("painter");
-            entity.Property(e => e.Price).HasColumnName("price");
-            entity.Property(e => e.Release).HasColumnName("release");
-            entity.Property(e => e.Sculptor).HasColumnName("sculptor");
-            entity.Property(e => e.Series).HasColumnName("series");
-            entity.Property(e => e.Size).HasColumnName("size");
-            entity.Property(e => e.Url).HasColumnName("url");
-        });
-
         modelBuilder.Entity<BlogUrl>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("blog_url_pkey");

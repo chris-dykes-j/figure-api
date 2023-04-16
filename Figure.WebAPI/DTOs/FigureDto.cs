@@ -8,7 +8,7 @@ public class FigureDto
     public string OriginUrl { get; set; }
     public string FigureName { get; set; }
     public string SeriesName { get; set; }
-    public string CharacterName { get; set; }
+    public List<string> Characters { get; set; }
     public List<string> Sculptors { get; set; }
     public List<string> Painters { get; set; }
     public List<string> Materials { get; set; }

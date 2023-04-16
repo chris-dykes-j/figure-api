@@ -15,49 +15,86 @@ public class FigureRepository
     
     public async Task<FigureDto?> GetFigureById(int id, string languageCode = "ja")
     {
-        return await (
+        var query = 
             from figure in _context.Figures
             where figure.Id == id
-            join figureName in _context.FigureNames on figure.Id equals figureName.FigureId into fnGroup
-            from fn in fnGroup.DefaultIfEmpty().Where(x => x.LanguageCode == languageCode)
-            join seriesName in _context.SeriesNames on figure.Id equals seriesName.FigureId into snGroup
-            from sn in snGroup.DefaultIfEmpty().Where(x => x.LanguageCode == languageCode)
-            join characterName in _context.CharacterNames on figure.Id equals characterName.FigureId into cnGroup
-            from cn in cnGroup.DefaultIfEmpty().Where(x => x.LanguageCode == languageCode)
-            join sculptor in _context.Sculptors on figure.Id equals sculptor.FigureId into sGroup
-            from s in sGroup.DefaultIfEmpty().Where(x => x.LanguageCode == languageCode)
-            join painter in _context.Painters on figure.Id equals painter.FigureId into pGroup
-            from p in pGroup.DefaultIfEmpty().Where(x => x.LanguageCode == languageCode)
-            join material in _context.Materials on figure.Id equals material.FigureId into mGroup
-            from m in mGroup.DefaultIfEmpty()
-            join measurement in _context.Measurements on figure.Id equals measurement.FigureId into meGroup
-            from me in meGroup.DefaultIfEmpty().Where(x => x.LanguageCode == languageCode)
-            join releaseDate in _context.ReleaseDates on figure.Id equals releaseDate.FigureId into rdGroup
-            from rd in rdGroup.DefaultIfEmpty()
-            join price in _context.Prices on figure.Id equals price.FigureId into prGroup
-            from pr in prGroup.DefaultIfEmpty()
-            join blogUrl in _context.BlogUrls on figure.Id equals blogUrl.FigureId into buGroup
-            from bu in buGroup.DefaultIfEmpty()
+            from figureName in _context.FigureNames.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                .DefaultIfEmpty()
+            from seriesName in _context.SeriesNames.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                .DefaultIfEmpty()
             select new FigureDto
             {
                 Id = figure.Id,
                 Scale = figure.Scale,
                 Brand = figure.Brand,
                 OriginUrl = figure.OriginUrl,
-                FigureName = fn.Text,
-                SeriesName = sn.Text,
-                CharacterName = cn.Text,
-                Sculptors = sGroup.Where(x => x.LanguageCode == languageCode).Select(x => x.Text).ToList(),
-                Painters = pGroup.Where(x => x.LanguageCode == languageCode).Select(x => x.Text).ToList(),
-                Materials = mGroup.Select(x => x.MaterialType).ToList(),
-                Measurements = meGroup.Where(x => x.LanguageCode == languageCode).Select(x => x.Text).ToList(),
-                ReleaseYears = rdGroup.Select(x => x.ReleaseYear).ToList(),
-                ReleaseMonths = rdGroup.Select(x => x.ReleaseMonth).ToList(),
-                PricesWithTax = prGroup.Select(x => x.PriceWithTax).ToList(),
-                PricesWithoutTax = prGroup.Select(x => x.PriceWithoutTax).ToList(),
-                Edition = pr.Edition,
-                BlogUrls = buGroup.Select(x => x.Url).ToList()
-            })
-            .FirstOrDefaultAsync();
+                FigureName = figureName.Text,
+                SeriesName = seriesName.Text,
+                Characters = _context.CharacterNames.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                    .Select(x => x.Text).ToList(),
+                Sculptors = _context.Sculptors.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                    .Select(x => x.Text).ToList(),
+                Painters = _context.Painters.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                    .Select(x => x.Text).ToList(),
+                Materials = _context.Materials.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.MaterialType).ToList(),
+                Measurements = _context.Measurements.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                    .Select(x => x.Text).ToList(),
+                ReleaseYears = _context.ReleaseDates.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.ReleaseYear).ToList(),
+                ReleaseMonths = _context.ReleaseDates.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.ReleaseMonth).ToList(),
+                PricesWithTax =
+                    _context.Prices.Where(x => x.FigureId == figure.Id)
+                        .Select(x => x.PriceWithTax).ToList(),
+                PricesWithoutTax = _context.Prices.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.PriceWithoutTax).ToList(),
+                Edition = _context.Prices.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.Edition).FirstOrDefault(),
+                BlogUrls = _context.BlogUrls.Where(x => x.FigureId == figure.Id).Select(x => x.Url).ToList()
+            };
+        return await query.FirstOrDefaultAsync();
+    }
+
+    public async Task<List<FigureDto>> GetListOfFigures(string languageCode = "ja")
+    {
+        var query = 
+            from figure in _context.Figures
+            from figureName in _context.FigureNames.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                .DefaultIfEmpty()
+            from seriesName in _context.SeriesNames.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                .DefaultIfEmpty()
+            select new FigureDto
+            {
+                Id = figure.Id,
+                Scale = figure.Scale,
+                Brand = figure.Brand,
+                OriginUrl = figure.OriginUrl,
+                FigureName = figureName.Text,
+                SeriesName = seriesName.Text,
+                Characters = _context.CharacterNames.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                    .Select(x => x.Text).ToList(),
+                Sculptors = _context.Sculptors.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                    .Select(x => x.Text).ToList(),
+                Painters = _context.Painters.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                    .Select(x => x.Text).ToList(),
+                Materials = _context.Materials.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.MaterialType).ToList(),
+                Measurements = _context.Measurements.Where(x => x.FigureId == figure.Id && x.LanguageCode == languageCode)
+                    .Select(x => x.Text).ToList(),
+                ReleaseYears = _context.ReleaseDates.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.ReleaseYear).ToList(),
+                ReleaseMonths = _context.ReleaseDates.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.ReleaseMonth).ToList(),
+                PricesWithTax = _context.Prices.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.PriceWithTax).ToList(),
+                PricesWithoutTax = _context.Prices.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.PriceWithoutTax).ToList(),
+                Edition = _context.Prices.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.Edition).FirstOrDefault(),
+                BlogUrls = _context.BlogUrls.Where(x => x.FigureId == figure.Id)
+                    .Select(x => x.Url).ToList()
+            };
+        return await query.ToListAsync();
     }
 }

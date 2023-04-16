@@ -17,4 +17,9 @@ public class FigureService
     {
         return await _figureRepository.GetFigureById(id);
     }
+    
+    public async Task<ActionResult<List<FigureDto>>> GetListOfFigures()
+    {
+        return await _figureRepository.GetListOfFigures();
+    }
 }

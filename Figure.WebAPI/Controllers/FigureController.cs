@@ -16,15 +16,18 @@ public class FigureController : ControllerBase
     }
     
     [HttpGet]
-    [Route("/{id:int}")]
+    [Route("{id:int}")]
     public async Task<ActionResult<FigureDto?>> GetFigureById(int id)
     {
         var figure = await _figureService.GetFigureById(id);
-        return Ok(figure); // : NotFound();
+        return Ok(figure);
     }
 
-        
-
     // Get list of figures. Paginate results. Include search and filter queries.
-    
+    [HttpGet]
+    public async Task<ActionResult<List<FigureDto>>> GetListOfFigures()
+    {
+        return Ok(await _figureService.GetListOfFigures());
+    }
+
 }

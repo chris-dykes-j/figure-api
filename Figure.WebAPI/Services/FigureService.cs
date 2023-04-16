@@ -1,6 +1,5 @@
 using Figure.WebAPI.DTOs;
 using Figure.WebAPI.Repositories;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Figure.WebAPI.Services;
 
@@ -15,5 +14,5 @@ public class FigureService
 
     public async Task<FigureDto?> GetFigureById(int id) => await _figureRepository.GetFigureById(id);
 
-    public async Task<ActionResult<List<FigureDto>>> GetListOfFigures() => await _figureRepository.GetListOfFigures();
+    public async Task<List<FigureDto>> GetListOfFigures() => await _figureRepository.GetListOfFigures();
 }

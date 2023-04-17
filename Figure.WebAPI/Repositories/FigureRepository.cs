@@ -10,7 +10,7 @@ public class FigureRepository
 {
     private readonly FiguresDbContext _context;
 
-    private const string DefaultLanguage = Constants.DefaultLanguage;
+    private const string DefaultLanguage = Constants.DefaultLanguage ;
     
     public FigureRepository(FiguresDbContext context)
     {
@@ -31,7 +31,10 @@ public class FigureRepository
         if (!string.IsNullOrWhiteSpace(figureParameters.SearchQuery))
             figuresQuery = ApplySearchFilter(figuresQuery, figureParameters.SearchQuery);
         
-        return await figuresQuery.ToListAsync();
+        return await figuresQuery
+            .Skip(figureParameters.PageSize * (figureParameters.PageNumber - 1))
+            .Take(figureParameters.PageSize)
+            .ToListAsync();
     }
     
     #region Helper Methods
@@ -43,7 +46,7 @@ public class FigureRepository
     
     private async Task<string> GetValidLanguageCode(string languageCode)
     {
-        return await LanguageCodeExists(languageCode) ? languageCode : DefaultLanguage;
+        return await LanguageCodeExists(languageCode) ? languageCode : DefaultLanguage; // Could also send 406, but this is nicer
     }
 
     private IQueryable<FigureDto> ApplySearchFilter(IQueryable<FigureDto> query, string searchQuery)

@@ -1,6 +1,7 @@
 using Figure.WebAPI.Context;
 using Figure.WebAPI.DTOs;
 using Figure.WebAPI.Entities;
+using Figure.WebAPI.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Figure.WebAPI.Repositories;
@@ -9,29 +10,28 @@ public class FigureRepository
 {
     private readonly FiguresDbContext _context;
 
-    private const string DefaultLanguage = "ja";
+    private const string DefaultLanguage = Constants.DefaultLanguage;
     
     public FigureRepository(FiguresDbContext context)
     {
         _context = context;
     }
     
-    public async Task<FigureDto?> GetFigureById(int id, string languageCode, string? searchQuery)
+    public async Task<FigureDto?> GetFigureById(int id, string language)
     {
-        languageCode = await GetValidLanguageCode(languageCode);
-        var query = GetFiguresQuery(_context.Figures.Where(x => x.Id == id), languageCode);
-        if (!string.IsNullOrWhiteSpace(searchQuery)) query = ApplySearchFilter(query, searchQuery);
-
-        return await query.FirstOrDefaultAsync();
+        language = await GetValidLanguageCode(language); 
+        return await SelectFigureQuery(_context.Figures.Where(x => x.Id == id), language)
+            .FirstOrDefaultAsync();
     }
     
-    public async Task<List<FigureDto>> GetListOfFigures(string languageCode, string? searchQuery)
+    public async Task<List<FigureDto>> GetListOfFigures(FigureParameters figureParameters)
     {
-        languageCode = await GetValidLanguageCode(languageCode);
-        var query = GetFiguresQuery(_context.Figures, languageCode);
-        if (!string.IsNullOrWhiteSpace(searchQuery)) query = ApplySearchFilter(query, searchQuery);
+        var languageCode = await GetValidLanguageCode(figureParameters.Language);
+        var figuresQuery = SelectFigureQuery(_context.Figures, languageCode);
+        if (!string.IsNullOrWhiteSpace(figureParameters.SearchQuery))
+            figuresQuery = ApplySearchFilter(figuresQuery, figureParameters.SearchQuery);
         
-        return await query.ToListAsync();
+        return await figuresQuery.ToListAsync();
     }
     
     #region Helper Methods
@@ -58,7 +58,7 @@ public class FigureRepository
                                 || x.Edition.ToUpper().Contains(searchQuery.ToUpper()));
     }
 
-    private IQueryable<FigureDto> GetFiguresQuery(IQueryable<AnimeFigure> figures, string languageCode)
+    private IQueryable<FigureDto> SelectFigureQuery(IQueryable<AnimeFigure> figures, string languageCode)
     {
         return from figure in figures
             let figureName = figure.FigureNames.FirstOrDefault(x => x.LanguageCode == languageCode)

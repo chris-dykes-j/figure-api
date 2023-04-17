@@ -1,5 +1,6 @@
 using Figure.WebAPI.DTOs;
 using Figure.WebAPI.Services;
+using Figure.WebAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Figure.WebAPI.Controllers;
@@ -10,7 +11,7 @@ public class FigureController : ControllerBase
 {
     private readonly FigureService _figureService;
     
-    private const string DefaultLanguage = "ja";
+    private const string DefaultLanguage = Constants.DefaultLanguage;
     
     public FigureController(FigureService figureService)
     {
@@ -19,20 +20,15 @@ public class FigureController : ControllerBase
     
     [HttpGet]
     [Route("{id:int}")]
-    public async Task<ActionResult<FigureDto?>> GetFigureById(
-        int id, 
-        [FromQuery] string? searchQuery,
-        [FromQuery] string? language = DefaultLanguage)
+    public async Task<ActionResult<FigureDto?>> GetFigureById(int id, [FromQuery] string? language = DefaultLanguage)
     {
-        var figure = await _figureService.GetFigureById(id, language!, searchQuery);
+        var figure = await _figureService.GetFigureById(id, language!);
         return figure != null ? Ok(figure) : NotFound();
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<FigureDto>>> GetListOfFigures(
-        [FromQuery] string? searchQuery,
-        [FromQuery] string? language = DefaultLanguage)
+    public async Task<ActionResult<List<FigureDto>>> GetListOfFigures([FromQuery] FigureParameters figureParameters)
     {
-        return Ok(await _figureService.GetListOfFigures(language!, searchQuery));
+        return Ok(await _figureService.GetListOfFigures(figureParameters));
     }
 }

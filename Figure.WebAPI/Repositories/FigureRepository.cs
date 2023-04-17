@@ -9,23 +9,37 @@ public class FigureRepository
 {
     private readonly FiguresDbContext _context;
 
+    private const string DefaultLanguage = "ja";
+    
     public FigureRepository(FiguresDbContext context)
     {
         _context = context;
     }
     
-    public async Task<FigureDto?> GetFigureById(int id, string languageCode = "ja")
+    public async Task<FigureDto?> GetFigureById(int id, string languageCode)
     {
-        return await GetFiguresQuery(_context.Figures.Where(x => x.Id == id),
-            languageCode).FirstOrDefaultAsync();
+        languageCode = await GetValidLanguageCode(languageCode);
+        return await GetFiguresQuery(_context.Figures.Where(x => x.Id == id), languageCode)
+            .FirstOrDefaultAsync();
     }
 
-    public async Task<List<FigureDto>> GetListOfFigures(string languageCode = "ja")
+    public async Task<List<FigureDto>> GetListOfFigures(string languageCode)
     {
+        languageCode = await GetValidLanguageCode(languageCode);
         return await GetFiguresQuery(_context.Figures, languageCode).ToListAsync();
     }
 
-    private IQueryable<FigureDto> GetFiguresQuery(IQueryable<AnimeFigure> figures, string languageCode = "ja")
+    private async Task<bool> LanguageCodeExists(string? languageCode)
+    {
+        return await _context.Languages.AnyAsync(x => x.LanguageCode == languageCode);
+    }
+    
+    private async Task<string> GetValidLanguageCode(string languageCode)
+    {
+        return await LanguageCodeExists(languageCode) ? languageCode : DefaultLanguage;
+    }
+    
+    private IQueryable<FigureDto> GetFiguresQuery(IQueryable<AnimeFigure> figures, string languageCode)
     {
         return from figure in figures
             let figureName = figure.FigureNames.FirstOrDefault(x => x.LanguageCode == languageCode)

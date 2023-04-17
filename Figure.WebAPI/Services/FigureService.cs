@@ -12,7 +12,13 @@ public class FigureService
         _figureRepository = figureRepository;
     }
 
-    public async Task<FigureDto?> GetFigureById(int id) => await _figureRepository.GetFigureById(id);
+    public async Task<FigureDto?> GetFigureById(int id, string languageCode)
+    {
+        return await _figureRepository.GetFigureById(id, languageCode);
+    }
 
-    public async Task<List<FigureDto>> GetListOfFigures() => await _figureRepository.GetListOfFigures();
+    public async Task<List<FigureDto>> GetListOfFigures(string languageCode)
+    {
+        return await _figureRepository.GetListOfFigures(languageCode);
+    }
 }

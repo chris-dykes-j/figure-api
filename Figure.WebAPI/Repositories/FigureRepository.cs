@@ -16,19 +16,26 @@ public class FigureRepository
         _context = context;
     }
     
-    public async Task<FigureDto?> GetFigureById(int id, string languageCode)
+    public async Task<FigureDto?> GetFigureById(int id, string languageCode, string? searchQuery)
     {
         languageCode = await GetValidLanguageCode(languageCode);
-        return await GetFiguresQuery(_context.Figures.Where(x => x.Id == id), languageCode)
-            .FirstOrDefaultAsync();
-    }
+        var query = GetFiguresQuery(_context.Figures.Where(x => x.Id == id), languageCode);
+        if (!string.IsNullOrWhiteSpace(searchQuery)) query = ApplySearchFilter(query, searchQuery);
 
-    public async Task<List<FigureDto>> GetListOfFigures(string languageCode)
+        return await query.FirstOrDefaultAsync();
+    }
+    
+    public async Task<List<FigureDto>> GetListOfFigures(string languageCode, string? searchQuery)
     {
         languageCode = await GetValidLanguageCode(languageCode);
-        return await GetFiguresQuery(_context.Figures, languageCode).ToListAsync();
+        var query = GetFiguresQuery(_context.Figures, languageCode);
+        if (!string.IsNullOrWhiteSpace(searchQuery)) query = ApplySearchFilter(query, searchQuery);
+        
+        return await query.ToListAsync();
     }
-
+    
+    #region Helper Methods
+    
     private async Task<bool> LanguageCodeExists(string? languageCode)
     {
         return await _context.Languages.AnyAsync(x => x.LanguageCode == languageCode);
@@ -38,7 +45,19 @@ public class FigureRepository
     {
         return await LanguageCodeExists(languageCode) ? languageCode : DefaultLanguage;
     }
-    
+
+    private IQueryable<FigureDto> ApplySearchFilter(IQueryable<FigureDto> query, string searchQuery)
+    {
+        return query.Where(x => x.FigureName.ToUpper().Contains(searchQuery.ToUpper())
+                                || x.SeriesName.ToUpper().Contains(searchQuery.ToUpper())
+                                || x.Characters.Any(y => y.ToUpper().Contains(searchQuery.ToUpper()))
+                                || x.Scale.Contains(searchQuery)
+                                || x.Brand.ToUpper().Contains(searchQuery.ToUpper())
+                                || x.Sculptors.Any(y => y.ToUpper().Contains(searchQuery.ToUpper()))
+                                || x.Painters.Any(y => y.ToUpper().Contains(searchQuery.ToUpper()))
+                                || x.Edition.ToUpper().Contains(searchQuery.ToUpper()));
+    }
+
     private IQueryable<FigureDto> GetFiguresQuery(IQueryable<AnimeFigure> figures, string languageCode)
     {
         return from figure in figures
@@ -80,4 +99,6 @@ public class FigureRepository
                 BlogUrls = blogUrls
             }; 
     }
+
+    #endregion
 }

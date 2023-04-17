@@ -24,17 +24,15 @@ public class FigureRepository
             .FirstOrDefaultAsync();
     }
     
-    public async Task<List<FigureDto>> GetListOfFigures(FigureParameters figureParameters)
+    public async Task<PagedList<FigureDto>> GetListOfFigures(FigureParameters figureParameters)
     {
         var languageCode = await GetValidLanguageCode(figureParameters.Language);
         var figuresQuery = SelectFigureQuery(_context.Figures, languageCode);
         if (!string.IsNullOrWhiteSpace(figureParameters.SearchQuery))
             figuresQuery = ApplySearchFilter(figuresQuery, figureParameters.SearchQuery);
-        
-        return await figuresQuery
-            .Skip(figureParameters.PageSize * (figureParameters.PageNumber - 1))
-            .Take(figureParameters.PageSize)
-            .ToListAsync();
+
+        return await PagedList<FigureDto>.CreateAsync(figuresQuery, figureParameters.PageNumber,
+            figureParameters.PageSize);
     }
     
     #region Helper Methods

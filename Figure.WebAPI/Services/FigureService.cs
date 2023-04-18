@@ -1,4 +1,5 @@
 using Figure.WebAPI.DTOs;
+using Figure.WebAPI.Models;
 using Figure.WebAPI.Repositories;
 using Figure.WebAPI.Utilities;
 
@@ -13,13 +14,14 @@ public class FigureService
         _figureRepository = figureRepository;
     }
 
-    public async Task<FigureDto?> GetFigureById(int id, string language)
+    public async Task<FigureModel?> GetFigureById(int id, string language)
     {
-        return await _figureRepository.GetFigureById(id, language);
+        return new FigureModel((await _figureRepository.GetFigureById(id, language))!);
     }
 
-    public async Task<List<FigureDto>> GetListOfFigures(FigureParameters figureParameters)
+    public async Task<List<FigureModel>> GetListOfFigures(FigureParameters figureParameters)
     {
-        return await _figureRepository.GetListOfFigures(figureParameters);
+        var figureDtos = await _figureRepository.GetListOfFigures(figureParameters);
+        return figureDtos.Select(figureDto => new FigureModel(figureDto)).ToList();
     }
 }

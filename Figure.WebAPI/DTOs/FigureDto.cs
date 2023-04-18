@@ -17,6 +17,6 @@ public class FigureDto
     public List<short> ReleaseMonths { get; set; }
     public List<int?> PricesWithTax { get; set; }
     public List<int?> PricesWithoutTax { get; set; }
-    public string Edition { get; set; }
+    public List<string> Edition { get; set; }
     public List<string> BlogUrls { get; set; }
 }

@@ -10,7 +10,7 @@ public class FigureRepository
 {
     private readonly FiguresDbContext _context;
 
-    private const string DefaultLanguage = Constants.DefaultLanguage ;
+    private const string DefaultLanguage = Constants.DefaultLanguage;
     
     public FigureRepository(FiguresDbContext context)
     {
@@ -59,31 +59,70 @@ public class FigureRepository
     {
         var filters = new List<Func<IQueryable<FigureDto>, IQueryable<FigureDto>>>
         {
-            q => figureParameters.FigureName != null ? q.Where(x => x.FigureName.ToUpper().Contains(figureParameters.FigureName.ToUpper())) : q,
-            q => figureParameters.Character != null ? q.Where(x => x.Characters.Any(y => y.ToUpper().Contains(figureParameters.Character.ToUpper()))) : q,
-            q => figureParameters.Sculptor != null ? q.Where(x => x.Sculptors.Any(y => y.ToUpper().Contains(figureParameters.Sculptor.ToUpper()))) : q,
-            q => figureParameters.Painter != null ? q.Where(x => x.Painters.Any(y => y.ToUpper().Contains(figureParameters.Painter.ToUpper()))) : q,
-            q => figureParameters.Series != null ? q.Where(x => x.SeriesName.ToUpper().Contains(figureParameters.Series.ToUpper())) : q,
-            q => figureParameters.Brand != null ? q.Where(x => x.Brand.ToUpper().Equals(figureParameters.Brand.ToUpper())) : q,
-            q => figureParameters.Year != null ? q.Where(x => x.ReleaseYears.Any(y => y.Equals(figureParameters.Year))) : q,
-            q => figureParameters.Month != null ? q.Where(x => x.ReleaseMonths.Any(y => y.Equals(figureParameters.Month))) : q,
-            
+            q => figureParameters.FigureName != null 
+                ? q.Where(x => x.FigureName.ToUpper().Contains(figureParameters.FigureName.ToUpper())) 
+                : q,
+            q => figureParameters.Character != null 
+                ? q.Where(x => x.Characters.Any(y => y.ToUpper().Contains(figureParameters.Character.ToUpper()))) 
+                : q,
+            q => figureParameters.Sculptor != null 
+                ? q.Where(x => x.Sculptors.Any(y => y.ToUpper().Contains(figureParameters.Sculptor.ToUpper()))) 
+                : q,
+            q => figureParameters.Painter != null 
+                ? q.Where(x => x.Painters.Any(y => y.ToUpper().Contains(figureParameters.Painter.ToUpper()))) 
+                : q,
+            q => figureParameters.Series != null 
+                ? q.Where(x => x.SeriesName.ToUpper().Contains(figureParameters.Series.ToUpper())) 
+                : q,
+            q => figureParameters.Brand != null
+                ? q.Where(x => x.Brand.ToUpper().Equals(figureParameters.Brand.ToUpper())) 
+                : q,
+            q => figureParameters.Year != null
+                ? q.Where(x => x.ReleaseYears.Any(y => y.Equals(figureParameters.Year))) 
+                : q,
+            q => figureParameters.Month != null 
+                ? q.Where(x => x.ReleaseMonths.Any(y => y.Equals(figureParameters.Month))) 
+                : q,
             q => figureParameters.MinPrice != null
                 ? q.Where(x => (x.PricesWithoutTax.Any() 
                     ? x.PricesWithoutTax.Min() 
                     : x.PricesWithTax.Min()) >= figureParameters.MinPrice)
                 : q,
-            
             q => figureParameters.MaxPrice != null 
-                ? q.Where(x => (x.PricesWithTax.Any()
-                    ? x.PricesWithTax.Max()
-                    : x.PricesWithoutTax.Max()) <= figureParameters.MaxPrice)
+                ? q.Where(x => (x.PricesWithTax.Any() 
+                    ? x.PricesWithTax.Max() 
+                    : x.PricesWithoutTax.Max()) <= figureParameters.MaxPrice) 
+                : q,
+            q => figureParameters.Scale != null
+                ? q.Where(x => x.Scale.Equals(figureParameters.Scale))
+                : q,
+            q => figureParameters.MinScale != null
+                ? q.Where(x => IsGreaterOrEqualScale(x.Scale, figureParameters.MinScale))
                 : q
+            /* q =>
+            {
+                int figureScale, queryScale;
+                return figureParameters.MinSize != null
+                    ? q.Where(x =>
+                        (int.TryParse(x.Scale[3..], out figureScale) ? figureScale : 0) >=
+                        (int.TryParse(figureParameters.MinSize[3..], out queryScale) ? queryScale : 0))
+                    : q;
+            } */
         };
 
         return filters.Aggregate(query, (current, filter) => filter(current));
     }
 
+    private static bool IsGreaterOrEqualScale(string figureScaleStr, string minScaleStr)
+    {
+        if (int.TryParse(figureScaleStr[3..], out var figureScale) &&
+            int.TryParse(minScaleStr[3..], out var minScale))
+        {
+            return figureScale >= minScale;
+        }
+        return false;
+    }
+    
     private IQueryable<FigureDto> ApplySearchToQuery(IQueryable<FigureDto> query, string? searchQuery)
     {
         if (string.IsNullOrWhiteSpace(searchQuery)) return query;

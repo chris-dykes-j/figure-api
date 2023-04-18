@@ -11,8 +11,9 @@ public class FigureParameters
     public string? Brand { get; set; }
     public int? MinPrice { get; set; }
     public int? MaxPrice { get; set; }
-    public string? MinSize { get; set; }
-    public string? MaxSize { get; set; }
+    public string? Scale { get; set; }
+    public string? MinScale { get; set; }
+    public string? MaxScale { get; set; }
     public string? Sculptor { get; set; }
     public string? Painter { get; set; }
     public string Language { get; set; } = Constants.DefaultLanguage;

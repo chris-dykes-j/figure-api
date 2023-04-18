@@ -55,7 +55,7 @@ public class FigureRepository
                                 || x.Brand.ToUpper().Contains(searchQuery.ToUpper())
                                 || x.Sculptors.Any(y => y.ToUpper().Contains(searchQuery.ToUpper()))
                                 || x.Painters.Any(y => y.ToUpper().Contains(searchQuery.ToUpper()))
-                                || x.Edition.ToUpper().Contains(searchQuery.ToUpper()));
+                                || x.Edition.Any(y => y.ToUpper().Contains(searchQuery.ToUpper())));
     }
 
     private IQueryable<FigureDto> SelectFigureQuery(IQueryable<AnimeFigure> figures, string languageCode)
@@ -72,11 +72,11 @@ public class FigureRepository
             let materials = figure.Materials.Select(x => x.MaterialType).ToList()
             let measurements = figure.Measurements.Where(x => x.LanguageCode == languageCode)
                 .Select(x => x.Text).ToList()
-            let releaseYears = figure.ReleaseDates.Select(x => x. ReleaseYear).ToList()
+            let releaseYears = figure.ReleaseDates.Select(x => x.ReleaseYear).ToList()
             let releaseMonths = figure.ReleaseDates.Select(x => x.ReleaseMonth).ToList()
             let pricesWithTax = figure.Prices.Select(x => x.PriceWithTax).ToList()
             let pricesWithoutTax = figure.Prices.Select(x => x.PriceWithoutTax).ToList()
-            let edition = figure.Prices.Select(x => x.Edition).FirstOrDefault()
+            let edition = figure.Prices.Select(x => x.Edition).ToList()
             let blogUrls = figure.BlogUrls.Select(x => x.Url).ToList()
             select new FigureDto
             {

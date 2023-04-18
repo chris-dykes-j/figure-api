@@ -14,37 +14,14 @@ public class FigureService
         _figureRepository = figureRepository;
     }
 
-    public async Task<FigureDto?> GetFigureById(int id, string language)
+    public async Task<FigureModel?> GetFigureById(int id, string language)
     {
-        return await _figureRepository.GetFigureById(id, language);
+        return new FigureModel((await _figureRepository.GetFigureById(id, language))!);
     }
 
-    public async Task<List<FigureDto>> GetListOfFigures(FigureParameters figureParameters)
+    public async Task<List<FigureModel>> GetListOfFigures(FigureParameters figureParameters)
     {
-        return await _figureRepository.GetListOfFigures(figureParameters);
-    }
-
-    private FigureModel MapToFigureModel(FigureDto figureDto)
-    {
-        return new FigureModel
-        {
-            Id = figureDto.Id,
-            Scale = figureDto.Scale,
-            Brand = figureDto.Brand,
-            OriginUrl = figureDto.OriginUrl,
-            FigureName = figureDto.FigureName,
-            SeriesName = figureDto.SeriesName,
-            Characters = figureDto.Characters,
-            Sculptors = figureDto.Sculptors,
-            Painters = figureDto.Painters,
-            Materials = figureDto.Materials,
-            Measurements = figureDto.Measurements,
-            ReleaseYears = figureDto.ReleaseYears,
-            ReleaseMonths = new List<Month>(), //figureDto.ReleaseMonths,
-            PricesWithTax = figureDto.PricesWithTax,
-            PricesWithoutTax = figureDto.PricesWithoutTax,
-            Edition = figureDto.Edition,
-            BlogUrls = figureDto.BlogUrls
-        };
+        var figureDtos = await _figureRepository.GetListOfFigures(figureParameters);
+        return figureDtos.Select(figureDto => new FigureModel(figureDto)).ToList();
     }
 }

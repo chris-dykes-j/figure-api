@@ -1,4 +1,3 @@
-using Figure.WebAPI.DTOs;
 using Figure.WebAPI.Models;
 using Figure.WebAPI.Repositories;
 using Figure.WebAPI.Utilities;

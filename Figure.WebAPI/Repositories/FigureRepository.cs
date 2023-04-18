@@ -28,13 +28,21 @@ public class FigureRepository
     {
         var languageCode = await GetValidLanguageCode(figureParameters.Language);
         var figuresQuery = SelectFigureQuery(_context.Figures, languageCode);
-        if (!string.IsNullOrWhiteSpace(figureParameters.SearchQuery))
-            figuresQuery = ApplySearchFilter(figuresQuery, figureParameters.SearchQuery);
+        figuresQuery = ApplySearchToQuery(figuresQuery, figureParameters.SearchQuery);
+        figuresQuery = ApplyFiltersToQuery(figuresQuery, figureParameters);
+        // figuresQuery = ApplyOrderByToQuery(figuresQuery);
 
         return await PagedList<FigureDto>.CreateAsync(figuresQuery, figureParameters.PageNumber,
             figureParameters.PageSize);
     }
-    
+
+    private IQueryable<FigureDto> ApplyOrderByToQuery(IQueryable<FigureDto> query)
+    {
+        query = query.OrderByDescending(x => x.ReleaseYears)
+                .ThenByDescending(x => x.ReleaseMonths);
+        return query;
+    }
+
     #region Helper Methods
     
     private async Task<bool> LanguageCodeExists(string? languageCode)
@@ -47,8 +55,38 @@ public class FigureRepository
         return await LanguageCodeExists(languageCode) ? languageCode : DefaultLanguage; // Could also send 406, but this is nicer
     }
 
-    private IQueryable<FigureDto> ApplySearchFilter(IQueryable<FigureDto> query, string searchQuery)
+    private IQueryable<FigureDto> ApplyFiltersToQuery(IQueryable<FigureDto> query, FigureParameters figureParameters)
     {
+        var filters = new List<Func<IQueryable<FigureDto>, IQueryable<FigureDto>>>
+        {
+            q => figureParameters.FigureName != null ? q.Where(x => x.FigureName.ToUpper().Contains(figureParameters.FigureName.ToUpper())) : q,
+            q => figureParameters.Character != null ? q.Where(x => x.Characters.Any(y => y.ToUpper().Contains(figureParameters.Character.ToUpper()))) : q,
+            q => figureParameters.Sculptor != null ? q.Where(x => x.Sculptors.Any(y => y.ToUpper().Contains(figureParameters.Sculptor.ToUpper()))) : q,
+            q => figureParameters.Painter != null ? q.Where(x => x.Painters.Any(y => y.ToUpper().Contains(figureParameters.Painter.ToUpper()))) : q,
+            q => figureParameters.Series != null ? q.Where(x => x.SeriesName.ToUpper().Contains(figureParameters.Series.ToUpper())) : q,
+            q => figureParameters.Brand != null ? q.Where(x => x.Brand.ToUpper().Equals(figureParameters.Brand.ToUpper())) : q,
+            q => figureParameters.Year != null ? q.Where(x => x.ReleaseYears.Any(y => y.Equals(figureParameters.Year))) : q,
+            q => figureParameters.Month != null ? q.Where(x => x.ReleaseMonths.Any(y => y.Equals(figureParameters.Month))) : q,
+            
+            q => figureParameters.MinPrice != null
+                ? q.Where(x => (x.PricesWithoutTax.Any() 
+                    ? x.PricesWithoutTax.Min() 
+                    : x.PricesWithTax.Min()) >= figureParameters.MinPrice)
+                : q,
+            
+            q => figureParameters.MaxPrice != null 
+                ? q.Where(x => (x.PricesWithTax.Any()
+                    ? x.PricesWithTax.Max()
+                    : x.PricesWithoutTax.Max()) <= figureParameters.MaxPrice)
+                : q
+        };
+
+        return filters.Aggregate(query, (current, filter) => filter(current));
+    }
+
+    private IQueryable<FigureDto> ApplySearchToQuery(IQueryable<FigureDto> query, string? searchQuery)
+    {
+        if (string.IsNullOrWhiteSpace(searchQuery)) return query;
         return query.Where(x => x.FigureName.ToUpper().Contains(searchQuery.ToUpper())
                                 || x.SeriesName.ToUpper().Contains(searchQuery.ToUpper())
                                 || x.Characters.Any(y => y.ToUpper().Contains(searchQuery.ToUpper()))

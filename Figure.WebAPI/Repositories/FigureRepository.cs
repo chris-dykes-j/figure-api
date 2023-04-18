@@ -95,34 +95,12 @@ public class FigureRepository
                 : q,
             q => figureParameters.Scale != null
                 ? q.Where(x => x.Scale.Equals(figureParameters.Scale))
-                : q,
-            q => figureParameters.MinScale != null
-                ? q.Where(x => IsGreaterOrEqualScale(x.Scale, figureParameters.MinScale))
                 : q
-            /* q =>
-            {
-                int figureScale, queryScale;
-                return figureParameters.MinSize != null
-                    ? q.Where(x =>
-                        (int.TryParse(x.Scale[3..], out figureScale) ? figureScale : 0) >=
-                        (int.TryParse(figureParameters.MinSize[3..], out queryScale) ? queryScale : 0))
-                    : q;
-            } */
         };
 
         return filters.Aggregate(query, (current, filter) => filter(current));
     }
 
-    private static bool IsGreaterOrEqualScale(string figureScaleStr, string minScaleStr)
-    {
-        if (int.TryParse(figureScaleStr[3..], out var figureScale) &&
-            int.TryParse(minScaleStr[3..], out var minScale))
-        {
-            return figureScale >= minScale;
-        }
-        return false;
-    }
-    
     private IQueryable<FigureDto> ApplySearchToQuery(IQueryable<FigureDto> query, string? searchQuery)
     {
         if (string.IsNullOrWhiteSpace(searchQuery)) return query;

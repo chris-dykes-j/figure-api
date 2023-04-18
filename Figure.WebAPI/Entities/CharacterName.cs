@@ -1,6 +1,6 @@
 ﻿namespace Figure.WebAPI.Entities;
 
-public partial class CharacterName
+public class CharacterName
 {
     public int Id { get; set; }
 

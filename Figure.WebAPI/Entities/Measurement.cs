@@ -1,6 +1,6 @@
 ﻿namespace Figure.WebAPI.Entities;
 
-public partial class Measurement
+public class Measurement
 {
     public int Id { get; set; }
 
@@ -10,7 +10,7 @@ public partial class Measurement
 
     public string Text { get; set; } = null!;
 
-    public virtual global::Figure.WebAPI.Entities.AnimeFigure AnimeFigure { get; set; } = null!;
+    public virtual AnimeFigure AnimeFigure { get; set; } = null!;
 
     public virtual Language LanguageCodeNavigation { get; set; } = null!;
 }

@@ -1,6 +1,6 @@
 ﻿namespace Figure.WebAPI.Entities;
 
-public partial class Language
+public class Language
 {
     public string LanguageCode { get; set; } = null!;
 

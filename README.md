@@ -5,8 +5,9 @@ Read only RESTful Web API, WIP. Currently only implemented to show Alter figures
 ### Goals
 - [x] Pagination
 - [x] Searching and Filtering
-- [ ] More options for filtering
+- [ ] Sorting
+- [ ] More options for filtering (by price, release, etc.)
 - [ ] Paging metadata
-- [ ] Client Model for Figure
+- [x] Client Model for Figure
 - [ ] HATEOS
 - [ ] Images of database entries

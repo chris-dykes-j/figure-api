@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options => 
-    options.ReturnHttpNotAcceptable = true)
-    .AddXmlDataContractSerializerFormatters();
+builder.Services.AddControllers(options => options.ReturnHttpNotAcceptable = true);
 
 builder.Services.AddDbContext<FiguresDbContext>(options =>
     options.UseNpgsql(Environment.GetEnvironmentVariable("FIGUREDB")));

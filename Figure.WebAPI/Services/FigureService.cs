@@ -18,9 +18,10 @@ public class FigureService
         return new FigureModel((await _figureRepository.GetFigureById(id, language))!);
     }
 
-    public async Task<List<FigureModel>> GetListOfFigures(FigureParameters figureParameters)
+    public async Task<PagedList<FigureModel>> GetListOfFigures(FigureParameters figureParameters)
     {
         var figureDtos = await _figureRepository.GetListOfFigures(figureParameters);
-        return figureDtos.Select(figureDto => new FigureModel(figureDto)).ToList();
+        var figureModels = figureDtos.Select(figureDto => new FigureModel(figureDto)).ToList();
+        return new PagedList<FigureModel>(figureModels, figureDtos.TotalCount, figureDtos.CurrentPage, figureDtos.PageSize);
     }
 }

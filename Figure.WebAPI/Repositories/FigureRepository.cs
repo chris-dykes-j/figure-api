@@ -30,16 +30,24 @@ public class FigureRepository
         var figuresQuery = SelectFigureQuery(_context.Figures, languageCode);
         figuresQuery = ApplySearchToQuery(figuresQuery, figureParameters.SearchQuery);
         figuresQuery = ApplyFiltersToQuery(figuresQuery, figureParameters);
-        // figuresQuery = ApplyOrderByToQuery(figuresQuery);
+        figuresQuery = ApplyOrderByToQuery(figuresQuery, figureParameters.SortBy, figureParameters.Order);
 
         return await PagedList<FigureDto>.CreateAsync(figuresQuery, figureParameters.PageNumber,
             figureParameters.PageSize);
     }
 
-    private IQueryable<FigureDto> ApplyOrderByToQuery(IQueryable<FigureDto> query)
+    private IQueryable<FigureDto> ApplyOrderByToQuery(IQueryable<FigureDto> query, string sortBy, string order)
     {
-        query = query.OrderByDescending(x => x.ReleaseYears)
-                .ThenByDescending(x => x.ReleaseMonths);
+        if (sortBy.ToUpper().Equals("DATE") && order.ToUpper().Equals("DESC"))
+        {
+            query = query.OrderByDescending(x => x.ReleaseYears.Max())
+                .ThenByDescending(x => x.ReleaseMonths.Max());
+        }
+        if (sortBy.ToUpper().Equals("DATE") && order.ToUpper().Equals("ASC"))
+        {
+            query = query.OrderBy(x => x.ReleaseYears.Max())
+                .ThenBy(x => x.ReleaseMonths.Max());
+        }
         return query;
     }
 

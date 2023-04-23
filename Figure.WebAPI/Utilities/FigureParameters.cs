@@ -15,6 +15,8 @@ public class FigureParameters
     public string? Sculptor { get; set; }
     public string? Painter { get; set; }
     public string Language { get; set; } = Constants.DefaultLanguage;
+    public string SortBy { get; set; } = "Date";
+    public string Order { get; set; } = "Desc";
     
     public int PageNumber { get; set; } = 1;
 
@@ -25,6 +27,4 @@ public class FigureParameters
         get => _pageSize;
         set => _pageSize = value > Constants.MaxPageSize ? Constants.MaxPageSize : value;
     }
-
-    public string OrderBy { get; set; } = "Date";
 }

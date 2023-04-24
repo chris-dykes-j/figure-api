@@ -19,6 +19,7 @@ public class FigureModel
     public List<string> BlogUrls { get; private set; }
     public List<Date> ReleaseDates { get; private set; }
     public List<Release> ReleasePrices { get; private set; }
+    public List<string> ImageUrls { get; private set; }
 
     public FigureModel(FigureDto figureDto)
     {
@@ -35,6 +36,7 @@ public class FigureModel
         Materials = figureDto.Materials;
         Measurements = figureDto.Measurements;
         BlogUrls = figureDto.BlogUrls;
+        ImageUrls = figureDto.ImageUrls;
         ReleaseDates = GetReleaseDates(figureDto.ReleaseYears, figureDto.ReleaseMonths);
         ReleasePrices = GetReleasePrices(figureDto.PricesWithTax, figureDto.PricesWithoutTax, figureDto.Edition);
     }

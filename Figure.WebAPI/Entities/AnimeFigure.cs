@@ -15,6 +15,8 @@ public class AnimeFigure
     public virtual ICollection<CharacterName> CharacterNames { get; } = new List<CharacterName>();
 
     public virtual ICollection<FigureName> FigureNames { get; } = new List<FigureName>();
+    
+    public virtual ICollection<ImageUrl> ImageUrls { get; } = new List<ImageUrl>();
 
     public virtual ICollection<Material> Materials { get; } = new List<Material>();
 

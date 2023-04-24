@@ -14,6 +14,8 @@ public partial class FiguresDbContext : DbContext
     public virtual DbSet<AnimeFigure> Figures { get; set; } = null!;
 
     public virtual DbSet<FigureName> FigureNames { get; set; } = null!;
+    
+    public virtual DbSet<ImageUrl> ImageUrls { get; set; } = null!;
 
     public virtual DbSet<Language> Languages { get; set; } = null!;
 
@@ -124,6 +126,24 @@ public partial class FiguresDbContext : DbContext
                 .HasConstraintName("figure_name_language_code_fkey");
         });
 
+        modelBuilder.Entity<ImageUrl>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("image_url_pkey");
+
+            entity.ToTable("image_url");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.FigureId).HasColumnName("figure_id");
+            entity.Property(e => e.Url)
+                .HasMaxLength(255)
+                .HasColumnName("image_url");
+
+            entity.HasOne(d => d.Figure).WithMany(p => p.ImageUrls)
+                .HasForeignKey(d => d.FigureId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("image_url_figure_id_fkey");
+        });
+        
         modelBuilder.Entity<Language>(entity =>
         {
             entity.HasKey(e => e.LanguageCode).HasName("languages_pkey");

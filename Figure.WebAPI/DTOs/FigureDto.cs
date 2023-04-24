@@ -19,4 +19,5 @@ public class FigureDto
     public List<int?> PricesWithoutTax { get; set; }
     public List<string> Edition { get; set; }
     public List<string> BlogUrls { get; set; }
+    public List<string> ImageUrls { get; set; }
 }

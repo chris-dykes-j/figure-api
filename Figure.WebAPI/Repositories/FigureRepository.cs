@@ -142,6 +142,7 @@ public class FigureRepository
             let pricesWithoutTax = figure.Prices.Select(x => x.PriceWithoutTax).ToList()
             let edition = figure.Prices.Select(x => x.Edition).ToList()
             let blogUrls = figure.BlogUrls.Select(x => x.Url).ToList()
+            let imgUrls = figure.ImageUrls.Select(x => x.Url).ToList()
             select new FigureDto
             {
                 Id = figure.Id,
@@ -160,7 +161,8 @@ public class FigureRepository
                 PricesWithTax = pricesWithTax,
                 PricesWithoutTax = pricesWithoutTax,
                 Edition = edition, 
-                BlogUrls = blogUrls
+                BlogUrls = blogUrls,
+                ImageUrls = imgUrls
             }; 
     }
 

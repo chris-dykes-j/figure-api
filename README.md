@@ -9,8 +9,9 @@ Read only RESTful Web API, WIP. Currently only implemented to show Alter figures
 - [x] More options for filtering
   - [x] Min, max price
   - [x] Release Year, Month
-  - [ ] Min, max size (?)
 - [x] Sorting
+  - [ ] More sorting options
 - [x] Client Model for Figure
+- [x] Images of database entries
 - [ ] HATEOS
-- [ ] Images of database entries
+- [ ] Documentation

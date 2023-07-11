@@ -1,17 +1,13 @@
 # Figure Web API
 
-Read only RESTful Web API, WIP. Currently only implemented to show Alter figures.
+RESTful Web API for anime figure data! Currently in a prototype phase; this project is ongoing. \
+Example: https://api.anime-figures.moe/figure?pageSize=30&year=2020&language=jp
 
-### Goals
-- [x] Pagination
-  - [x] Paging metadata
-- [x] Searching and Filtering
-- [x] More options for filtering
-  - [x] Min, max price
-  - [x] Release Year, Month
-- [x] Sorting
-  - [ ] More sorting options
-- [x] Client Model for Figure
-- [x] Images of database entries
-- [ ] HATEOS
-- [ ] Documentation
+### Project Goals
+- [ ] Integrate new data sets
+- [ ] Implement HATEOS
+- [ ] Refactor current implementations
+- [ ] Document project and create client docs page
+- [ ] Implement Liquibase
+- [ ] Create CI/CD Pipeline
+- [ ] Regular weekly updates to figure data

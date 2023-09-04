@@ -1,15 +1,16 @@
-name: CI
+name: Deploy to Server
 
 on:
-  push:    
-    branches: [main]
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: self-hosted
 
     strategy:
-      matrix:
+      matrix: 
         dotnet: ["7.0.400"]
 
     steps:

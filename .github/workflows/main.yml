@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        dotnet: ["7.0.x"]
+        dotnet: ["7.0.400"]
 
     steps:
       - uses: actions/checkout@v2

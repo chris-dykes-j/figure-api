@@ -32,3 +32,8 @@ jobs:
 
       - name: Publish
         run: dotnet publish -c Release -o /var/www/anime-figures.moe
+      
+      - name: Restart the app
+        run: |
+          export XDG_RUNTIME_DIR=/run/user/$(id -u)
+          systemctl --user restart anime-figures.service

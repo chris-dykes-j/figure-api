@@ -9,3 +9,4 @@ Example: https://api.anime-figures.moe/figure?pageSize=30&year=2020&language=jp
 - [ ] Add API documentation
 - [ ] Implement Liquibase
 - [ ] Implement HATEOS
+- [ ] Add Nendoroid Data
